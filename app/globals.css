@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0c0a;
+  --foreground: #ece7db;
+  --muted: #9a9486;
+  --line: rgba(236, 231, 219, 0.12);
+  --accent: #d7a45a;
+  --accent-soft: rgba(215, 164, 90, 0.14);
+  --panel: #131410;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-panel: var(--panel);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-fraunces);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  scrollbar-color: var(--accent) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-outfit), sans-serif;
+}
+
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(
+      ellipse 80% 50% at 10% -10%,
+      rgba(215, 164, 90, 0.12),
+      transparent 55%
+    ),
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: auto, 72px 72px, 72px 72px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  z-index: -1;
+}
+
+::selection {
+  background: var(--accent);
+  color: #1a140c;
+}
