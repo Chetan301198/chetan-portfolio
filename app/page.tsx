@@ -15,15 +15,17 @@ const nav = [
 export default async function Home() {
   const github = await getGithubSnapshot();
   const avatar =
-    github.user?.avatar_url ??
-    `https://github.com/${profile.githubUser}.png`;
+    github.user?.avatar_url ?? `https://github.com/${profile.githubUser}.png`;
   const githubSince = github.user?.created_at.slice(0, 4) ?? null;
 
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-20 border-b border-line bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-4">
-          <a href="#top" className="shrink-0 font-mono text-sm tracking-[0.2em] text-accent">
+          <a
+            href="#top"
+            className="shrink-0 font-mono text-sm tracking-[0.2em] text-accent"
+          >
             CB
           </a>
           <nav className="flex min-w-0 flex-1 items-center gap-4 overflow-x-auto text-sm text-muted">
@@ -49,12 +51,12 @@ export default async function Home() {
       </header>
 
       <main id="top" className="mx-auto w-full max-w-6xl flex-1 px-6">
-        <section className="grid gap-10 py-20 md:grid-cols-[1.4fr_0.8fr] md:items-end md:py-28">
+        <section className="grid gap-10 py-20 md:grid-cols-[1.4fr_0.8fr] md:items-end">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent">
               {profile.location}
             </p>
-            <h1 className="mt-5 font-[family-name:var(--font-fraunces)] text-5xl leading-[1.05] tracking-tight md:text-7xl">
+            <h1 className="mt-5 font-(family-name:--font-fraunces) text-5xl leading-[1.05] tracking-tight md:text-7xl">
               {profile.name}
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted md:text-xl">
@@ -101,7 +103,9 @@ export default async function Home() {
               </div>
               <div>
                 <dt className="text-muted">Since</dt>
-                <dd className="mt-1 text-xl font-medium">{githubSince ?? "—"}</dd>
+                <dd className="mt-1 text-xl font-medium">
+                  {githubSince ?? "—"}
+                </dd>
               </div>
             </dl>
           </div>
@@ -109,7 +113,7 @@ export default async function Home() {
 
         <section id="about" className="border-t border-line py-20">
           <div className="grid gap-10 md:grid-cols-[0.4fr_1fr]">
-            <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+            <h2 className="font-(family-name:--font-fraunces) text-3xl">
               About
             </h2>
             <div className="space-y-5 text-lg leading-8 text-muted">
@@ -131,7 +135,7 @@ export default async function Home() {
         </section>
 
         <section id="experience" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+          <h2 className="font-(family-name:--font-fraunces) text-3xl">
             Experience
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -175,7 +179,7 @@ export default async function Home() {
         </section>
 
         <section id="projects" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+          <h2 className="font-(family-name:--font-fraunces) text-3xl">
             Selected projects
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -185,7 +189,9 @@ export default async function Home() {
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {profile.projects.map((project) => {
-              const live = github.repos.find((repo) => repo.name === project.repo);
+              const live = github.repos.find(
+                (repo) => repo.name === project.repo,
+              );
               return (
                 <a
                   key={project.repo}
@@ -200,7 +206,9 @@ export default async function Home() {
                       {live?.language ?? project.stack[0]}
                     </span>
                   </div>
-                  <p className="mt-3 leading-7 text-muted">{project.description}</p>
+                  <p className="mt-3 leading-7 text-muted">
+                    {project.description}
+                  </p>
                   <ul className="mt-5 flex flex-wrap gap-2">
                     {project.stack.map((item) => (
                       <li
