@@ -36,6 +36,27 @@ export type GithubSnapshot = {
   languages: LanguageShare[];
 };
 
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+export function formatMonthYear(value: string) {
+  const [year, month] = value.slice(0, 7).split("-");
+  const monthIndex = Number(month) - 1;
+  return `${monthNames[monthIndex] ?? month} ${year}`;
+}
+
 const headers = {
   Accept: "application/vnd.github+json",
   "User-Agent": "chetan-portfolio",
