@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { ContactSection } from "./components/contact-section";
+import { GithubSection } from "./components/github-section";
 import { getGithubSnapshot } from "@/lib/github";
 import { profile } from "@/lib/profile";
 
@@ -10,39 +12,20 @@ const nav = [
   { href: "#contact", label: "Contact" },
 ];
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-function formatDate(value: string) {
-  const [year, month] = value.slice(0, 7).split("-");
-  const monthIndex = Number(month) - 1;
-  return `${monthNames[monthIndex] ?? month} ${year}`;
-}
-
 export default async function Home() {
   const github = await getGithubSnapshot();
   const avatar =
-    github.user?.avatar_url ??
-    `https://github.com/${profile.githubUser}.png`;
+    github.user?.avatar_url ?? `https://github.com/${profile.githubUser}.png`;
   const githubSince = github.user?.created_at.slice(0, 4) ?? null;
 
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-20 border-b border-line bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-4">
-          <a href="#top" className="shrink-0 font-mono text-sm tracking-[0.2em] text-accent">
+          <a
+            href="#top"
+            className="shrink-0 font-mono text-sm tracking-[0.2em] text-accent"
+          >
             CB
           </a>
           <nav className="flex min-w-0 flex-1 items-center gap-4 overflow-x-auto text-sm text-muted">
@@ -68,12 +51,12 @@ export default async function Home() {
       </header>
 
       <main id="top" className="mx-auto w-full max-w-6xl flex-1 px-6">
-        <section className="grid gap-10 py-20 md:grid-cols-[1.4fr_0.8fr] md:items-end md:py-28">
+        <section className="grid gap-10 py-20 md:grid-cols-[1.4fr_0.8fr] md:items-end">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent">
               {profile.location}
             </p>
-            <h1 className="mt-5 font-[family-name:var(--font-fraunces)] text-5xl leading-[1.05] tracking-tight md:text-7xl">
+            <h1 className="mt-5 font-(family-name:--font-fraunces) text-5xl leading-[1.05] tracking-tight md:text-7xl">
               {profile.name}
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted md:text-xl">
@@ -120,7 +103,9 @@ export default async function Home() {
               </div>
               <div>
                 <dt className="text-muted">Since</dt>
-                <dd className="mt-1 text-xl font-medium">{githubSince ?? "—"}</dd>
+                <dd className="mt-1 text-xl font-medium">
+                  {githubSince ?? "—"}
+                </dd>
               </div>
             </dl>
           </div>
@@ -128,7 +113,7 @@ export default async function Home() {
 
         <section id="about" className="border-t border-line py-20">
           <div className="grid gap-10 md:grid-cols-[0.4fr_1fr]">
-            <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+            <h2 className="font-(family-name:--font-fraunces) text-3xl">
               About
             </h2>
             <div className="space-y-5 text-lg leading-8 text-muted">
@@ -150,7 +135,7 @@ export default async function Home() {
         </section>
 
         <section id="experience" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+          <h2 className="font-(family-name:--font-fraunces) text-3xl">
             Experience
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -194,7 +179,7 @@ export default async function Home() {
         </section>
 
         <section id="projects" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
+          <h2 className="font-(family-name:--font-fraunces) text-3xl">
             Selected projects
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -204,7 +189,9 @@ export default async function Home() {
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {profile.projects.map((project) => {
-              const live = github.repos.find((repo) => repo.name === project.repo);
+              const live = github.repos.find(
+                (repo) => repo.name === project.repo,
+              );
               return (
                 <a
                   key={project.repo}
@@ -219,7 +206,9 @@ export default async function Home() {
                       {live?.language ?? project.stack[0]}
                     </span>
                   </div>
-                  <p className="mt-3 leading-7 text-muted">{project.description}</p>
+                  <p className="mt-3 leading-7 text-muted">
+                    {project.description}
+                  </p>
                   <ul className="mt-5 flex flex-wrap gap-2">
                     {project.stack.map((item) => (
                       <li
@@ -236,122 +225,9 @@ export default async function Home() {
           </div>
         </section>
 
-        <section id="github" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
-            GitHub usage
-          </h2>
-          <p className="mt-3 max-w-2xl text-muted">
-            Live language mix and recently updated public repos, refreshed from
-            the GitHub API.
-          </p>
+        <GithubSection github={github} />
 
-          {github.languages.length > 0 && (
-            <div className="mt-10 rounded-2xl border border-line bg-panel p-6">
-              <h3 className="text-sm uppercase tracking-[0.18em] text-muted">
-                Languages across public repos
-              </h3>
-              <div className="mt-4 flex h-3 overflow-hidden rounded-full">
-                {github.languages.map((language, index) => (
-                  <div
-                    key={language.name}
-                    title={`${language.name} ${language.percent.toFixed(1)}%`}
-                    className="h-full"
-                    style={{
-                      width: `${language.percent}%`,
-                      background:
-                        index === 0
-                          ? "var(--accent)"
-                          : `rgba(236, 231, 219, ${0.55 - index * 0.08})`,
-                    }}
-                  />
-                ))}
-              </div>
-              <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-                {github.languages.map((language) => (
-                  <li
-                    key={language.name}
-                    className="flex items-center justify-between text-sm"
-                  >
-                    <span>{language.name}</span>
-                    <span className="font-mono text-muted">
-                      {language.percent.toFixed(1)}%
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div className="mt-8 overflow-hidden rounded-2xl border border-line">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-panel text-muted">
-                <tr>
-                  <th className="px-5 py-3 font-medium">Repository</th>
-                  <th className="hidden px-5 py-3 font-medium sm:table-cell">
-                    Language
-                  </th>
-                  <th className="px-5 py-3 font-medium">Updated</th>
-                </tr>
-              </thead>
-              <tbody>
-                {github.repos.slice(0, 8).map((repo) => (
-                  <tr key={repo.name} className="border-t border-line">
-                    <td className="px-5 py-3">
-                      <a
-                        href={repo.html_url}
-                        className="hover:text-accent"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {repo.name}
-                      </a>
-                    </td>
-                    <td className="hidden px-5 py-3 text-muted sm:table-cell">
-                      {repo.language ?? "—"}
-                    </td>
-                    <td className="px-5 py-3 text-muted">
-                      {formatDate(repo.pushed_at || repo.updated_at)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="contact" className="border-t border-line py-20">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-3xl">
-            Contact
-          </h2>
-          <p className="mt-4 max-w-xl text-lg text-muted">
-            Open to frontend roles and collaborations. Reach me directly or
-            through the profiles below.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={`mailto:${profile.email}`}
-              className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-[#1a140c]"
-            >
-              {profile.email}
-            </a>
-            <a
-              href={profile.linkedin}
-              className="rounded-full border border-line px-5 py-2.5 text-sm hover:border-accent"
-              target="_blank"
-              rel="noreferrer"
-            >
-              LinkedIn
-            </a>
-            <a
-              href={profile.github}
-              className="rounded-full border border-line px-5 py-2.5 text-sm hover:border-accent"
-              target="_blank"
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
-          </div>
-        </section>
+        <ContactSection />
       </main>
 
       <footer className="border-t border-line">
